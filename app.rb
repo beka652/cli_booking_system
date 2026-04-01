@@ -1,4 +1,6 @@
-require_relative "booking"
+require_relative "./booking"
+require_relative "./resource"
+require_relative "./booking"
 
 class Main
 
@@ -14,15 +16,19 @@ class Main
     1.Make Booking
     2.Cancel Booking
     3.Add Resource
-    4.Remove Resource
-    5.quit
+    4.List available resources
+    5.List bookings
+    6.List users
+    7.quit
 
     Enter number:
     )
 
-    while false
+    while true
       print options
       choice = gets.chomp.strip
+
+
 
       case choice
       when  "1"
@@ -32,16 +38,41 @@ class Main
       when "3"
         add_resource
       when "4"
-        remove_resource
-      when  "5"
+        list_available_resources
+      when "5"
+        list_bookings
+      when "6"
+        list_users
+      when "7"
         exit
       else
         raise "Unkown command: #{choice}"
       end
-      end
-
     end
+
 
   end
 
+  def make_booking
+    puts "Make booking"
+  end
+
+  def cancel_booking
+    puts "Cancel Booking"
+  end
+
+  def add_resource
+    puts "Add resource"
+  end
+
+  def list_available_resources
+  end
+  def list_bookings
+  end
+  def list_users
+  end
+
 end
+
+
+Main.new
