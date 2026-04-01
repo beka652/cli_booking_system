@@ -64,7 +64,7 @@ class Main
       # get the user id
       print "Enter user id: "
       user_id = gets.chomp.strip
-      user = @user_container[user]
+      user = @user_container[user_id]
       # only proceed if the user is available
       if user
         booking = Booking.new(user, resource)
@@ -81,7 +81,17 @@ class Main
 
   def cancel_booking
     puts "Cancel Booking"
+    print "Enter Booking id: "
+    booking_id = get.chomp.strip
+    booking = @booking_container[booking_id]
+    if booking
+      booking.cancel
+    else
+      raise "Booking don't exist"
+    end
   end
+
+
 
   def add_resource
     puts "Add resource"
