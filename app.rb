@@ -95,6 +95,15 @@ class Main
 
   def add_resource
     puts "Add resource"
+    print "Enter resouce id: "
+    id = get.chomp.strip
+    print "Enter resource name: "
+    name = get.chomp.strip
+    print "Enter resource category: "
+    category = get.chomp.strip
+
+    resource = Resource.new(id, name , category)
+    @resource_container[id] = resource
   end
 
   def list_available_resources
