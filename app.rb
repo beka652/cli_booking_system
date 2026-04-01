@@ -110,6 +110,10 @@ class Main
     end
   end
   def list_bookings
+    puts "id------user----resource-----status----created_at"
+    @resource_container.each do |key, value|
+      puts "#{id} -------- #{value.user.name} ------- #{value.resource.name}-------#{value.status}------#{value.created}"
+    end
   end
   def list_users
   end
