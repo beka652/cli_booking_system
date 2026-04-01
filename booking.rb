@@ -1,16 +1,18 @@
 class Booking
-  def intialize(user, resource)
-    create_booking(user,resource)
-    @user = user
-    @resource = resource
-  end
-  def create_booking
+  attr_reader :user, :resource, :status, :created_at
+  def initialize(user, resource)
     if resource.avail
+      @user = user
+      @resource = resource
+      @status = "active"
+      @created_at = Time.now
       resource.avail=false
     else
-      raise "Resource already taken!!!"
+      raise "Resource already taken!"
     end
   end
-  def cancel_booking
+  def cancel
+    @status="cancelled"
+    @resource.avail=true
   end
 end
