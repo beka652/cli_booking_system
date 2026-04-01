@@ -71,9 +71,6 @@ class Main
         @booking_container[booking.id] = booking
       end
     end
-
-
-
   end
 
 
@@ -107,6 +104,10 @@ class Main
   end
 
   def list_available_resources
+    puts "id-----------name----------category"
+    @resource_container.each do |key, value|
+      puts "#{id} -------- #{value.name} ------- #{value.category}"
+    end
   end
   def list_bookings
   end
