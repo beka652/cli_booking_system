@@ -2,9 +2,9 @@ require "securerandom"
 require "sqlite3"
 
 class Booking
-  db = SQLite3::Database.new "booking_system.db"
+  @db ||= SQLite3::Database.new "booking_system.db"
   #======== create users table if it doesn't exist
-  db.execute <<~SQL
+  @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -12,7 +12,7 @@ class Booking
   );
   SQL
   #======== create resources table if it doesn't exist
-  db.execute <<~SQL
+  @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS resources (
       id TEXT  PRIMARY KEY,
       name TEXT NOT NULL,
@@ -20,7 +20,7 @@ class Booking
   );
   SQL
   #======= create bookings table if it doesn't exist
-  db.execute <<~SQL
+  @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS bookings (
       id TEXT PRMIARY KEY,
       user_id TEXT NOT NULL,
