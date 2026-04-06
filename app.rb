@@ -13,7 +13,7 @@ command = ARGV.join " "
 
 case command
 when "-list users", "-list resources", "-list bookings"
-  # do sth
+  _, list_type = command.split " "
 when "-create user"
   # do sth
 when "-make booking"
