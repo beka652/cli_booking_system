@@ -1,24 +1,37 @@
 require "securerandom"
+require "sqlite3"
 
 class Booking
-  attr_reader :id, :user, :resource, :status, :start_date, :end_date
+  db = SQLite3::Database.new "booking_system.db"
+  #======== create users table if it doesn't exist
+  db.execute <<~SQL
+  CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      role TEXT NOT NULL
+  );
+  SQL
+  #======== create resources table if it doesn't exist
+  db.execute <<~SQL
+  CREATE TABLE IF NOT EXISTS resources (
+      id TEXT  PRIMARY KEY,
+      name TEXT NOT NULL,
+      category TEXT NOT NULL
+  );
+  SQL
+  #======= create bookings table if it doesn't exist
+  db.execute <<~SQL
+  CREATE TABLE IF NOT EXISTS bookings (
+      id TEXT PRMIARY KEY,
+      user_id TEXT NOT NULL,
+      resource_id TEXT NOT NULL,
+      start_date TEXT NOT NULL,
+      end_date TEXT NOT NULL,
+      status TEXT NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users (id),
+      FOREIGN KEY (resource_id) REFERENCES resources (id)
+  );
+  SQL
+  # =============================================
 
-  def initialize(user, resource, start_date, end_date)
-    # a new booking is only  created if the given resource isn't taken by another user
-    total_reservations = find_all_reseravation_for_resource (resouce)
-    if total_reservations.length == 0
-      create_reservation(user, resource, start_date, end_date)
-    else
-      if conflicting_reservations_exist(total_reservations, start_date, end_date)
-        raise "Reservation conflict error"
-      else
-      end
-    end
-  end
-
-
-  def cancel
-    @status="cancelled"
-    @resource.avail=true
-  end
 end

@@ -1,3 +1,4 @@
 .ruby-lsp
 /vendor/bundle
 test.rb
+test.db
