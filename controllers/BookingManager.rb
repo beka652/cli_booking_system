@@ -11,12 +11,16 @@ class BookingManager
   end
 
   def list_users
-    users = User.get_all_users
-    console.print_users
+    users = @user_model.get_all_users
+    console.print_users users
   end
   def list_resources
+    resources = @resource_model.get_all_resources
+    console.print_users resources
   end
   def list_bookings
+    bookings = @booking_model.get_all_bookings
+    console.print_bookings bookings
   end
   def create_user
   end
