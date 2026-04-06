@@ -6,7 +6,7 @@ require_relative "./controllers/BookingManager"
 # -> ruby app.rb -create user
 # -> ruby app.rb -make booking
 # -> ruby app.rb -cancel booking
-#
+# -> ruby app.rb -add resource
 # also commands are case-sensitive (all commands must be in lower-case).
 
 command = ARGV.join " "
@@ -20,6 +20,8 @@ when "-make booking"
   # do sth
 when "-cancel booking"
   # do sth
+when "-add resource"
+  #do sth
 else
   # command not found!!!
 end
