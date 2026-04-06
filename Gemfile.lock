@@ -1,0 +1,15 @@
+GEM
+  specs:
+    sqlite3 (2.9.2-x86_64-linux-gnu)
+
+PLATFORMS
+  x86_64-linux-gnu
+
+DEPENDENCIES
+  sqlite3
+
+CHECKSUMS
+  sqlite3 (2.9.2-x86_64-linux-gnu)
+
+BUNDLED WITH
+  4.0.3
