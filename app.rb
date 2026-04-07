@@ -35,6 +35,7 @@ class Console
       # do sth
     when "-add resource"
       #do sth
+      add_resource
     else
       # command not found!!!
     end
@@ -83,7 +84,25 @@ class Console
     end
   end
 
+  def self.add_resource
+    while true
+      print "Please enter resource name: "
+      name = STDIN.gets.chomp.strip
+      break if is_name_valid (name)
+      puts "Incorrect name. Please enter a valid name!!!"
+    end
+    while true
+      print "Please enter its category: "
+      category = STDIN.gets.chomp.strip
+      break if is_role_valid category
+      puts "Incorrect role. Please enter a valid category"
+    end
+    @booking_manager.add_resouce name: name , category: category
+  end
+
 end
+
+
 
 
 Console.execute
