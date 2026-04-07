@@ -26,7 +26,8 @@ class BookingManager
   def create_user name:, role:
     @user_model.create_user name: , role:
   end
-  def add_resource
+  def add_resource name:, category:
+    @resource_model.create_resource name, category
   end
   def make_booking
   end
