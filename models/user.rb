@@ -26,12 +26,13 @@ class User
 
   def self.create_user name:, role:
     id = IDGenerator.generate_user_id
-    result = @db.execute("SELECT * FROM users WHERE id = #{id}")
+    result = @db.execute("SELECT * FROM users WHERE id = \"#{id}\"")
     until result.empty?
       id = IDGenerator.generate_user_id
       result = @db.execute("SELECT * FROM users WHERE id = #{id}")
     end
-    @db.execute("INSERT INTO users (id, name, role) VALUES (#{id} , #{name}, #{role}")
+    @db.execute("INSERT INTO users (id, name, role) VALUES (?, ?, ?)",
+      [id, name, role])
 
   end
 

@@ -1,7 +1,8 @@
 require "securerandom"
+require "date"
 
 class IDGenerator
-  @generator = securerandom
+  @generator = SecureRandom
   @id_length = 2
 
   def self.generate_user_id
