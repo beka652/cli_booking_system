@@ -16,8 +16,7 @@ class Resource
 
   def self.get_all_resources
     result = @db.execute2 ("SELECT * FROM resources")
-
-    hash_result = {
+    return {
       title: @title,
       headings: result.delete_at(0),
       rows: result

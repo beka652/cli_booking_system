@@ -2,6 +2,7 @@ require "securerandom"
 require "sqlite3"
 
 class Booking
+  @title = "Bookings"
   @db ||= SQLite3::Database.new "booking_system.db"
   #======= create bookings table if it doesn't exist
   @db.execute <<~SQL
@@ -17,5 +18,14 @@ class Booking
   );
   SQL
   # =============================================
+
+  def self.get_all_bookings
+    result = @db.execute2("SELECT * FROM bookings")
+    return {
+      title: @title,
+      headings:result.delete_at(0),
+      rows:result
+    }
+  end
 
 end

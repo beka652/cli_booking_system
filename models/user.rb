@@ -16,7 +16,7 @@ class User
   def self.get_all_users
     result = @db.execute2 "SELECT * FROM users"
     # continue tmrw from  here
-    hash_result = {
+    return {
       title: @title,
       headings: result.delete_at(0),
       rows:result
