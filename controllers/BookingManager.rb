@@ -17,7 +17,7 @@ class BookingManager
   end
   def list_resources
     resources = @resource_model.get_all_resources
-    console.print_users resources
+    return Terminal::Table.new title: resources[:title], headings: resources[:headings], rows: resources[:rows]
   end
   def list_bookings
     bookings = @booking_model.get_all_bookings
