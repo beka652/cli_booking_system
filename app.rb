@@ -28,7 +28,7 @@ class Console
       end
 
     when "-create user"
-      # do sth
+      create_user
     when "-make booking"
       # do sth
     when "-cancel booking"
@@ -48,6 +48,13 @@ class Console
   end
   def self.list_bookings
     puts @booking_manager.list_bookings
+  end
+  def self.create_user
+    print "Please enter your name: "
+    name = gets.chomp
+    print "Please enter your role: "
+    role = gets.chomp
+    @booking_manager.create_user name: name, role: role
   end
 end
 
