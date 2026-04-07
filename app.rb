@@ -50,12 +50,39 @@ class Console
     puts @booking_manager.list_bookings
   end
   def self.create_user
-    print "Please enter your name: "
-    name = gets.chomp
-    print "Please enter your role: "
-    role = gets.chomp
+    while true
+      print "Please enter your name: "
+      name = gets.chomp.strip
+      break if is_name_valid name
+      puts "Incorrect name. Please enter a valid name!!!"
+    end
+    while true
+      print "Please enter your role: "
+      role = gets.chomp.strip
+      break if is_role_valid role
+      puts "Incorrect role. Please enter a valid role"
+    end
     @booking_manager.create_user name: name, role: role
   end
+
+  def is_name_valid name:
+    name_pattern = /^([a-zA-Z ]{2,50})$/
+    if name_pattern.match? name
+      return true
+    else
+      false
+    end
+  end
+
+  def is_role_valid role:
+    role_pattern = /^([a-zA-Z ]{2,50})$/
+    if role_pattern.match? role
+      return true
+    else
+      return false
+    end
+  end
+
 end
 
 
