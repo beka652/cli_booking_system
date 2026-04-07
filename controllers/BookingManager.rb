@@ -21,7 +21,7 @@ class BookingManager
   end
   def list_bookings
     bookings = @booking_model.get_all_bookings
-    console.print_bookings bookings
+    return Terminal::Table.new title:bookings[:title], headings: bookings[:headings], rows: bookings[:rows]
   end
   def create_user
   end
