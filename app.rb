@@ -10,22 +10,21 @@ require_relative "./controllers/BookingManager"
 # also commands are case-sensitive (all commands must be in lower-case).
 
 class Console
-  @booking_manager ||=BookingManager.new
+  @booking_manager ||=BookingManager.new self
 
   def self.execute(args=ARGV)
     command = args.join " "
 
     case command
-
     when "-list users", "-list resources", "-list bookings"
       _, list_type = command.split " "
       case list_type
       when "users"
-        @booking_manager.list_users
+        list_users
       when "resources"
-        @booking_manager.list_resources
+        list_resources
       else
-        @booking_manager.list_bookings
+        list_bookings
       end
 
     when "-create user"
@@ -40,4 +39,17 @@ class Console
       # command not found!!!
     end
   end
+
+  def self.list_users
+    puts @booking_manager.list_users
+  end
+  def self.list_resources
+    puts @booking_manager.list_resources
+  end
+  def self.list_bookings
+    puts @booking_manager.list_bookings
+  end
 end
+
+
+Console.execute
