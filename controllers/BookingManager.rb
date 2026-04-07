@@ -1,6 +1,7 @@
 require_relative "../models/booking"
 require_relative "../models/resource"
 require_relative "../models/user"
+require "terminal-table"
 
 class BookingManager
   def initialize(console)
@@ -12,7 +13,7 @@ class BookingManager
 
   def list_users
     users = @user_model.get_all_users
-    console.print_users users
+    return  Terminal::Table.new title: users[:title], headings: users[:headings], rows: users[:rows]
   end
   def list_resources
     resources = @resource_model.get_all_resources
