@@ -22,4 +22,16 @@ class Resource
       rows: result
     }
   end
+
+  def self.add_resource name:, category:
+    id = IDGenerator.generate_resource_id
+    result = @db.execute("SELECT * FROM resources WHERE id = \"#{id}\"")
+    until result.empty?
+      id = IDGenerator.generate_resource_id
+      result = @db.execute("SELECT * FROM resources WHERE id = #{id}")
+    end
+    @db.execute("INSERT INTO resources (id, name, category) VALUES (?, ?, ?)",
+      [id, name, category])
+
+  end
 end

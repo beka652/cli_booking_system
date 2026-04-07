@@ -97,7 +97,7 @@ class Console
       break if is_role_valid category
       puts "Incorrect role. Please enter a valid category"
     end
-    @booking_manager.add_resouce name: name , category: category
+    @booking_manager.add_resource name: name , category: category
   end
 
 end
