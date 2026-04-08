@@ -109,17 +109,25 @@ class Console
 
     if user.nil?
       puts "Invalid user!!!"
-    elsif not (["assitant", "student"].include? user.role )
+    elsif not (["assitant", "student"].include? user.role.downcase )
       puts "Sorry only assistant and student can create booking"
     else
       puts "Enter resource id: "
       resource_id = STDIN.gets.chomp.strip
 
       if @booking_manager.resource_exist? resource_id
-        print  "Enter starting date: (yyyy-mm-dd) "
-        starting_date = STDIN.gets.chomp.strip
-        print "Enter ending date: (yyyy-mm-dd) "
-        ending_date = STDIN.gets.chomp.strip
+        while true
+          print  "Enter starting date: (yyyy-mm-dd) "
+          starting_date = STDIN.gets.chomp.strip
+          break if is_valid_date(starting_date)
+          puts  "Enter a valid"
+        end
+        while true
+          print "Enter ending date: (yyyy-mm-dd) "
+          ending_date = STDIN.gets.chomp.strip
+          break if is_valid_date(ending_date)
+          puts  "Enter a valid"
+        end
 
         if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
           puts "Resouces booked successfully"
@@ -134,7 +142,7 @@ class Console
 
   end
 
-  def self.is_validate_date(date)
+  def self.is_valid_date(date)
     ymd = date.split("-")
 
     if ymd.length != 3
