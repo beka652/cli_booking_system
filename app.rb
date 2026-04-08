@@ -28,6 +28,8 @@ class Console
     when "-add resource" #
       #do sth
       add_resource
+    when  "-help"
+      help
     else
       # command not found!!!
     end
@@ -172,6 +174,22 @@ class Console
     else
       print "Incorrect booking id"
     end
+  end
+
+  def self.help
+    puts <<~HELP
+                ____________________
+                # accepted commands #
+                ---------------------
+
+    # -> ruby app.rb -list [users | resources | bookings]
+    # -> ruby app.rb -create user
+    # -> ruby app.rb -make booking
+    # -> ruby app.rb -cancel booking
+    # -> ruby app.rb -add resource
+
+      # !!!  Note: all  commands are case-sensitive (all commands must be in lower-case). !!!
+    HELP
   end
 end
 
