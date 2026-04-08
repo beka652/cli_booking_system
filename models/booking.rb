@@ -33,23 +33,21 @@ class Booking
 
   def self.make_booking(user_id, resource_id, starting_date, ending_date)
     result = @db.execute("SELECT * FROM bookings WHERE resource_id='#{resource_id}'")
-    if !result.empty?
-      result.each do |row|
-        return false if conflict_exist? row, starting_date, ending_date
-      end
-    else
+    result.each do |row|
+      return false if conflict_exist? row, starting_date, ending_date
+    end
+
+    id = IDGenerator.generate_booking_id
+    result = @db.execute("SELECT * FROM bookings WHERE id = '#{id}'")
+
+    until result.empty?
       id = IDGenerator.generate_booking_id
       result = @db.execute("SELECT * FROM bookings WHERE id = '#{id}'")
-
-      until result.empty?
-        id = IDGenerator.generate_booking_id
-        result = @db.execute("SELECT * FROM bookings WHERE id = '{id}'")
-      end
-
-      @db.execute("INSERT INTO bookings (id, user_id, resource_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)",
-        [id, user_id, resource_id, starting_date, ending_date, "ACTIVE"])
-      return true
     end
+
+    @db.execute("INSERT INTO bookings (id, user_id, resource_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)",
+      [id, user_id, resource_id, starting_date, ending_date, "ACTIVE"])
+    return true
   end
 
   def self.conflict_exist?(row, starting_date, ending_date)
@@ -61,9 +59,8 @@ class Booking
 
     if row[5].strip == "CANCELLED" # if the status is not active
       return false
-    elsif  new_end_date < row_start_date &&
-     row_end_date < new_start_date
-     return false
+    elsif new_end_date < row_start_date || row_end_date < new_start_date
+      return false
     else
       return true
     end

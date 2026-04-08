@@ -1,0 +1,183 @@
+# Booking System (Ruby CLI)
+
+A command-line booking system built with Ruby and SQLite.  
+The application supports creating users, adding resources, making bookings with conflict checks, canceling bookings, and listing current records in table format.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [System Architecture](#system-architecture)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Known Issues](#known-issues)
+- [Troubleshooting](#troubleshooting)
+- [Data Model](#data-model)
+- [Implementation Notes](#implementation-notes)
+- [Roadmap](#roadmap)
+
+## Overview
+
+This project provides a lightweight, file-based booking backend and a CLI interface:
+
+- `app.rb` handles command parsing and console interaction.
+- `controllers/booking_manager.rb` coordinates application use-cases.
+- `models/*.rb` encapsulate data access and booking rules.
+- `generator/id_generator.rb` centralizes ID generation for users, resources, and bookings.
+- `db/booking_system.db` stores persistent data in SQLite.
+
+The design follows a simple layered pattern to keep responsibilities separate and implementation easy to extend.
+
+## Features
+
+- Interactive CLI commands for common booking operations
+- User and resource registration with generated IDs
+- Booking creation with overlap/conflict detection
+- Booking cancellation with status tracking (`ACTIVE` / `CANCELLED`)
+- Tabular listing for users, resources, and bookings
+- Automated booking tests with `minitest`
+- Explicit model dependency loading for `IDGenerator` in `user.rb`, `resource.rb`, and `booking.rb`
+
+## Technology Stack
+
+- **Language:** Ruby
+- **Database:** SQLite3
+- **Testing:** Minitest
+- **Console formatting:** Terminal::Table (required by `controllers/booking_manager.rb`)
+
+## System Architecture
+
+```text
+CLI (app.rb)
+   |
+   v
+Controller (BookingManager)
+   |
+   +--> User model ---------+
+   +--> Resource model -----+--> SQLite (db/booking_system.db)
+   +--> Booking model ------+
+
+Shared utility: IDGenerator (used by User, Resource, Booking)
+```
+
+## Project Structure
+
+```text
+booking_system/
+├── README.md                      # Project documentation
+├── Gemfile                        # Gem dependencies
+├── Gemfile.lock                   # Locked gem versions
+├── app.rb                         # CLI entrypoint
+├── controllers/
+│   └── booking_manager.rb         # Coordination layer
+├── models/
+│   ├── user.rb                    # User model and table setup
+│   ├── resource.rb                # Resource model and table setup
+│   └── booking.rb                 # Booking model and conflict logic
+├── generator/
+│   └── id_generator.rb            # ID generation utility
+├── errors/
+│   └── booking_system_error.rb    # Custom application error
+├── db/
+│   └── booking_system.db          # SQLite database file
+├── test/
+│   └── test_booking.rb            # Booking behavior tests (minitest)
+```
+
+## Getting Started
+
+### 1) Prerequisites
+
+- Ruby 3.x recommended
+- Bundler
+- SQLite3 development headers installed on your OS
+
+### 2) Install dependencies
+
+```bash
+bundle install
+```
+
+### 3) Run the application
+
+```bash
+ruby app.rb -help
+```
+
+## Usage
+
+Supported commands:
+
+```bash
+ruby app.rb -list users
+ruby app.rb -list resources
+ruby app.rb -list bookings
+ruby app.rb -create user
+ruby app.rb -add resource
+ruby app.rb -make booking
+ruby app.rb -cancel booking
+ruby app.rb -help
+```
+
+### Notes
+
+- Commands are case-sensitive and expected in lowercase.
+- Dates should be entered in `yyyy-mm-dd` format.
+- Booking creation requires a valid user and resource.
+- Booking conflicts are rejected based on booking date windows.
+
+## Testing
+
+Run the booking test suite:
+
+```bash
+ruby test/test_booking.rb
+```
+
+What is covered in `test/test_booking.rb`:
+
+- successful booking creation
+- conflict rejection for overlapping bookings
+- successful non-conflicting second booking for the same resource
+- booking existence lookup
+- cancellation state transition to `CANCELLED`
+- repeated cancellation behavior
+
+## Known Issues
+
+- Booking creation currently checks role values `assitant` and `student` in `app.rb`; note the spelling is `assitant` in the current implementation.
+
+## Troubleshooting
+
+- If you get gem load errors, run `bundle install` again and use `bundle exec ruby app.rb -help`.
+- If local data state causes unexpected behavior during manual testing, remove `db/booking_system.db` and rerun a command to recreate tables.
+- If tests fail due to stale local state, run `ruby test/test_booking.rb` directly; the test suite resets tables in setup.
+
+## Data Model
+
+The application stores three primary entities:
+
+- **users**: `id`, `name`, `role`
+- **resources**: `id`, `name`, `category`
+- **bookings**: `id`, `user_id`, `resource_id`, `start_date`, `end_date`, `status`
+
+Booking IDs, user IDs, and resource IDs are generated by `IDGenerator`.
+
+## Implementation Notes
+
+- `IDGenerator` is now explicitly required where used:
+  - `models/user.rb`
+  - `models/resource.rb`
+  - `models/booking.rb`
+- This removes reliance on file load order and prevents `NameError` when models are loaded independently.
+- The test suite in `test/test_booking.rb` resets tables per test for deterministic runs.
+
+## Roadmap
+
+- Add a migration strategy for schema evolution
+- Expand test coverage to include user/resource model behaviors
+- Add input and business rule validations for date ordering
+- Introduce CI workflow for automated test runs

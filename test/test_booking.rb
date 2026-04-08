@@ -38,6 +38,15 @@ class TestBooking < Minitest::Test
     assert_equal 1, @db.execute("SELECT * FROM bookings").length
   end
 
+  def test_make_booking_allows_non_conflicting_booking_for_same_resource
+    Booking.make_booking(@user_id, @resource_id, "2026-04-10", "2026-04-12")
+
+    made = Booking.make_booking(@user_id, @resource_id, "2026-04-20", "2026-04-22")
+
+    assert_equal true, made
+    assert_equal 2, @db.execute("SELECT * FROM bookings").length
+  end
+
   def test_booking_exist_returns_true_for_saved_booking
     Booking.make_booking(@user_id, @resource_id, "2026-04-10", "2026-04-12")
     booking_id = @db.execute("SELECT id FROM bookings").dig(0, 0)
