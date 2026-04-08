@@ -4,8 +4,7 @@ require_relative "../models/user"
 require "terminal-table"
 
 class BookingManager
-  def initialize(console)
-    @console = console
+  def initialize
     @booking_model = Booking
     @resource_model = Resource
     @user_model = User

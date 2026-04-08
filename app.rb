@@ -10,7 +10,7 @@ require_relative "./controllers/BookingManager"
 # also commands are case-sensitive (all commands must be in lower-case).
 
 class Console
-  @booking_manager ||=BookingManager.new self
+  @booking_manager ||=BookingManager.new
 
   def self.execute(args=ARGV)
     command = args.join " "
