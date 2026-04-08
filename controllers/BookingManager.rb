@@ -42,4 +42,8 @@ class BookingManager
   end
   def cancel_booking
   end
+
+  def booking_exist? id
+    @booking_model.booking_exist? id
+  end
 end

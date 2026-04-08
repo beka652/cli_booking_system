@@ -16,7 +16,7 @@ class Console
     command = args.join " "
 
     case command
-    when "-list users", "-list resources", "-list bookings"
+    when "-list users", "-list resources", "-list bookings" # done
       _, list_type = command.split " "
       case list_type
       when "users"
@@ -27,13 +27,13 @@ class Console
         list_bookings
       end
 
-    when "-create user"
+    when "-create user" # done
       create_user
-    when "-make booking"
+    when "-make booking" # done
       make_booking
     when "-cancel booking"
-      # do sth
-    when "-add resource"
+      cancel_booking
+    when "-add resource" #
       #do sth
       add_resource
     else
@@ -112,7 +112,7 @@ class Console
     elsif not (["assitant", "student"].include? user.role.downcase )
       puts "Sorry only assistant and student can create booking"
     else
-      puts "Enter resource id: "
+      print "Enter resource id: "
       resource_id = STDIN.gets.chomp.strip
 
       if @booking_manager.resource_exist? resource_id
@@ -120,19 +120,19 @@ class Console
           print  "Enter starting date: (yyyy-mm-dd) "
           starting_date = STDIN.gets.chomp.strip
           break if is_valid_date(starting_date)
-          puts  "Enter a valid"
+          puts  "Invalid date"
         end
         while true
           print "Enter ending date: (yyyy-mm-dd) "
           ending_date = STDIN.gets.chomp.strip
           break if is_valid_date(ending_date)
-          puts  "Enter a valid"
+          puts  "Invalid date"
         end
 
         if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
-          puts "Resouces booked successfully"
+          puts "Resources booked successfully"
         else
-          puts "Cannot currently create booking. (Date range occupied or confilicting)"
+          puts "Cannot currently create booking. (Date range occupied or conflicting)"
         end
 
       else
@@ -154,6 +154,21 @@ class Console
     else
       return true
     end
+  end
+
+  def self.cancel_booking
+    print "Enter booking id: "
+    id = STDIN.gets.chomp.strip
+
+    if @booking_manager.booking_exist? id
+      puts "Booking exists"
+      return
+      @booking_manager.cancel_booking id
+      "Booking cancelled successfully"
+    else
+      print "Incorrect booking id"
+    end
+
   end
 
 

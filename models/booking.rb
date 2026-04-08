@@ -65,8 +65,10 @@ class Booking
     else
       return true
     end
-
   end
 
-
+  def self.booking_exist? id
+    result = @db.execute("SELECT * FROM bookings where id='#{id}'")
+    if result.empty? then return false else return true end
+  end
 end
