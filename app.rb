@@ -116,9 +116,9 @@ class Console
       resource_id = STDIN.gets.chomp.strip
 
       if @booking_manager.resource_exist? resource_id
-        print  "Enter starting date: "
+        print  "Enter starting date: (yyyy-mm-dd) "
         starting_date = STDIN.gets.chomp.strip
-        print "Enter ending date: "
+        print "Enter ending date: (yyyy-mm-dd) "
         ending_date = STDIN.gets.chomp.strip
 
         if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
@@ -132,6 +132,20 @@ class Console
       end
     end
 
+  end
+
+  def self.is_validate_date(date)
+    ymd = date.split("-")
+
+    if ymd.length != 3
+      return false
+    elsif  ymd[0].length != 4 || ymd[1].length != 2 || ymd[2].length != 2
+      return false
+    elsif not (ymd[0].match(/\A\d+\z/) && ymd[1].match(/\A\d+\z/) && ymd[2].match(/\A\d+\z/) )
+      return false
+    else
+      return true
+    end
   end
 
 
