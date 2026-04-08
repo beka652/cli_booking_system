@@ -30,7 +30,7 @@ class Console
     when "-create user"
       create_user
     when "-make booking"
-      # do sth
+      make_booking
     when "-cancel booking"
       # do sth
     when "-add resource"
@@ -99,6 +99,38 @@ class Console
     end
     @booking_manager.add_resource name: name , category: category
   end
+
+  def self.make_booking
+    print  "Enter user id: "
+    user_id = STDIN.gets.chomp.strip
+    user = @booking_manager.get_user user_id
+
+    if user.nil?
+      puts "Invalid user!!!"
+    elsif not ( ["assitant", "student"].include? user.role )
+      puts "sorry only assistant and student can create booking"
+    else
+      puts "Enter resource id: "
+      resource_id = STDIN.gets.chomp.strip
+      if @booking_manager.resouce_exist? resource_id
+        print  "Enter starting date: "
+        starting_date = STDIN.gets.chomp.strip
+        print "Enter ending date: "
+        ending_date = STDIN.gets.chomp.strip
+
+        if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
+          puts "Resouces booked successfully"
+        else
+          puts "Cannot make booking currently. (Date range occupied or confilicting)"
+        end
+
+      else
+         puts "Invlaid resouce id"
+      end
+    end
+
+  end
+
 
 end
 
