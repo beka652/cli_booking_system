@@ -1,15 +1,21 @@
 GEM
   specs:
     sqlite3 (2.9.2-x86_64-linux-gnu)
+    terminal-table (1.8.0)
+      unicode-display_width (~> 1.1, >= 1.1.1)
+    unicode-display_width (1.8.0)
 
 PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
   sqlite3
+  terminal-table
 
 CHECKSUMS
   sqlite3 (2.9.2-x86_64-linux-gnu)
+  terminal-table (1.8.0)
+  unicode-display_width (1.8.0)
 
 BUNDLED WITH
   4.0.3
