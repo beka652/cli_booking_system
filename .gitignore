@@ -1,2 +1,3 @@
 .ruby-lsp
 /vendor/bundle
+*.db
