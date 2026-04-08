@@ -15,6 +15,10 @@ class BookingManager
     @user_model.get_user(user_id)
   end
 
+  def resource_exist?(resouce_id)
+    @resource_model.resource_exist?(resouce_id)
+  end
+
   def list_users
     users = @user_model.get_all_users
     return  Terminal::Table.new title: users[:title], headings: users[:headings], rows: users[:rows]

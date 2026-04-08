@@ -115,7 +115,7 @@ class Console
       puts "Enter resource id: "
       resource_id = STDIN.gets.chomp.strip
 
-      if @booking_manager.resouce_exist? resource_id
+      if @booking_manager.resource_exist? resource_id
         print  "Enter starting date: "
         starting_date = STDIN.gets.chomp.strip
         print "Enter ending date: "

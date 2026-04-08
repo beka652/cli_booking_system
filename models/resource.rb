@@ -3,7 +3,7 @@ require "sqlite3"
 class Resource
   @title = "Resources"
   @db ||= SQLite3::Database.new "booking_system.db"
-  #======== create resources table if it doesn't exist
+
   @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS resources (
       id TEXT  PRIMARY KEY,
@@ -11,8 +11,17 @@ class Resource
       category TEXT NOT NULL
   );
   SQL
-  # =============================================
 
+
+  def self.resource_exist (resouce_id)
+    result = @db.execute("SELECT * FROM resources WHERE id = #{resouce_id}")
+    if result.empty?
+      return false
+    else
+      return true
+    end
+
+  end
 
   def self.get_all_resources
     result = @db.execute2 ("SELECT * FROM resources")
