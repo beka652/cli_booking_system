@@ -1,4 +1,5 @@
 require "sqlite3"
+require_relative "../generator/id_generator"
 
 class Resource
   @title = "Resources"
@@ -44,3 +45,6 @@ class Resource
 
   end
 end
+
+
+

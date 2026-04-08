@@ -70,8 +70,8 @@ class Console
   end
 
   def self.create_user
-    name = get_name
-    role = get_role
+    name = get_user_name
+    role = get_user_role
 
     @booking_manager.create_user name: name, role: role
   end

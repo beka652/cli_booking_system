@@ -1,6 +1,7 @@
 require "securerandom"
 require "sqlite3"
 require "date"
+require_relative "../generator/id_generator"
 
 class Booking
   @title = "Bookings"
