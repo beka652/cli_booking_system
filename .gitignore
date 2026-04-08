@@ -3,3 +3,4 @@
 test.rb
 test.db
 booking_system.db
+*.db

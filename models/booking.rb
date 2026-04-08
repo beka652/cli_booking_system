@@ -4,8 +4,9 @@ require "date"
 
 class Booking
   @title = "Bookings"
-  @db ||= SQLite3::Database.new "booking_system.db"
-  #======= create bookings table if it doesn't exist
+
+  @db ||= SQLite3::Database.new "db/booking_system.db" # create booking_system database if it doesn't exist
+
   @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS bookings (
       id TEXT PRMIARY KEY,
@@ -31,7 +32,7 @@ class Booking
 
   def self.make_booking(user_id, resource_id, starting_date, ending_date)
     result = @db.execute("SELECT * FROM bookings WHERE resource_id='#{resource_id}'")
-    if !(result.empty?)
+    if !result.empty?
       result.each do |row|
         return false if conflict_exist? row, starting_date, ending_date
       end

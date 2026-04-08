@@ -1,4 +1,4 @@
-require_relative "./controllers/BookingManager"
+require_relative "./controllers/booking_manager"
 
 
 # accepted commands
@@ -36,7 +36,7 @@ class Console
   end
   private
 
-  def list_ command
+  def self.list_ command
     _, list_type = command.split " "
     case list_type
     when "users"

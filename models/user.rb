@@ -4,7 +4,7 @@ require_relative "../generator/id_generator"
 class User
 
   @title = "Users"
-  @db ||= SQLite3::Database.new "booking_system.db"
+  @db ||= SQLite3::Database.new "db/booking_system.db"
 
   @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS users (

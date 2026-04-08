@@ -2,7 +2,7 @@ require "sqlite3"
 
 class Resource
   @title = "Resources"
-  @db ||= SQLite3::Database.new "booking_system.db"
+  @db ||= SQLite3::Database.new "db/booking_system.db"
 
   @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS resources (
