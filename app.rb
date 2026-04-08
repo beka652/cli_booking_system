@@ -12,21 +12,13 @@ require_relative "./controllers/BookingManager"
 class Console
   @booking_manager ||=BookingManager.new
 
+
+
   def self.execute(args=ARGV)
     command = args.join " "
-
     case command
     when "-list users", "-list resources", "-list bookings" # done
-      _, list_type = command.split " "
-      case list_type
-      when "users"
-        list_users
-      when "resources"
-        list_resources
-      else
-        list_bookings
-      end
-
+      list_ command
     when "-create user" # done
       create_user
     when "-make booking" # done
@@ -41,15 +33,30 @@ class Console
     end
   end
 
+  def list_ command
+    _, list_type = command.split " "
+    case list_type
+    when "users"
+      list_users
+    when "resources"
+      list_resources
+    else
+      list_bookings
+    end
+  end
+
   def self.list_users
     puts @booking_manager.list_users
   end
+
   def self.list_resources
     puts @booking_manager.list_resources
   end
+
   def self.list_bookings
     puts @booking_manager.list_bookings
   end
+
   def self.create_user
     while true
       print "Please enter your name: "
@@ -128,23 +135,19 @@ class Console
           break if is_valid_date(ending_date)
           puts  "Invalid date"
         end
-
         if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
           puts "Resources booked successfully"
         else
           puts "Cannot currently create booking. (Date range occupied or conflicting)"
         end
-
       else
          puts "Invalid resouce id"
       end
     end
-
   end
 
   def self.is_valid_date(date)
     ymd = date.split("-")
-
     if ymd.length != 3
       return false
     elsif  ymd[0].length != 4 || ymd[1].length != 2 || ymd[2].length != 2
@@ -169,10 +172,7 @@ class Console
     else
       print "Incorrect booking id"
     end
-
   end
-
-
 end
 
 
