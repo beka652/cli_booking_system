@@ -11,6 +11,10 @@ class BookingManager
     @user_model = User
   end
 
+  def get_user(user_id)
+    @user_model.get_user(user_id)
+  end
+
   def list_users
     users = @user_model.get_all_users
     return  Terminal::Table.new title: users[:title], headings: users[:headings], rows: users[:rows]

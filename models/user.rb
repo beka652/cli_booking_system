@@ -2,9 +2,10 @@ require "sqlite3"
 require_relative "../generator/id_generator"
 
 class User
+
   @title = "Users"
   @db ||= SQLite3::Database.new "booking_system.db"
-  #======== create users table if it doesn't exist
+
   @db.execute <<~SQL
   CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
@@ -12,7 +13,16 @@ class User
       role TEXT NOT NULL
   );
   SQL
-  #======= create bookings table if it doesn't exist
+
+  def self.get_user(user_id)
+    result = @db.execute("SELECT * FROM users WHERE id=#{user_id}")
+
+    if result.empty?
+      return nil
+    else
+      return self.new(result.first[0], result.first[1], result.first[2])
+    end
+  end
 
   def self.get_all_users
     result = @db.execute2 "SELECT * FROM users"

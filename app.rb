@@ -101,17 +101,20 @@ class Console
   end
 
   def self.make_booking
+
     print  "Enter user id: "
     user_id = STDIN.gets.chomp.strip
-    user = @booking_manager.get_user user_id
+
+    user = @booking_manager.get_user(user_id)
 
     if user.nil?
       puts "Invalid user!!!"
-    elsif not ( ["assitant", "student"].include? user.role )
-      puts "sorry only assistant and student can create booking"
+    elsif not (["assitant", "student"].include? user.role )
+      puts "Sorry only assistant and student can create booking"
     else
       puts "Enter resource id: "
       resource_id = STDIN.gets.chomp.strip
+
       if @booking_manager.resouce_exist? resource_id
         print  "Enter starting date: "
         starting_date = STDIN.gets.chomp.strip
@@ -121,11 +124,11 @@ class Console
         if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
           puts "Resouces booked successfully"
         else
-          puts "Cannot make booking currently. (Date range occupied or confilicting)"
+          puts "Cannot currently create booking. (Date range occupied or confilicting)"
         end
 
       else
-         puts "Invlaid resouce id"
+         puts "Invalid resouce id"
       end
     end
 
