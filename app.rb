@@ -34,6 +34,7 @@ class Console
       # command not found!!!
     end
   end
+  private
 
   def list_ command
     _, list_type = command.split " "
@@ -60,19 +61,30 @@ class Console
   end
 
   def self.create_user
+    name = get_name
+    role = get_role
+
+    @booking_manager.create_user name: name, role: role
+  end
+
+  def self.get_user_name
     while true
       print "Please enter your name: "
       name = STDIN.gets.chomp.strip
       break if is_name_valid (name)
       puts "Incorrect name. Please enter a valid name!!!"
     end
+    return name
+  end
+
+  def self.get_user_role
     while true
       print "Please enter your role: "
       role = STDIN.gets.chomp.strip
       break if is_role_valid role
       puts "Incorrect role. Please enter a valid role"
     end
-    @booking_manager.create_user name: name, role: role
+    return role
   end
 
   def self.is_name_valid name
@@ -94,19 +106,29 @@ class Console
   end
 
   def self.add_resource
+    name = get_resource_name
+    category = get_resource_category
+    @booking_manager.add_resource name: name , category: category
+  end
+
+  def self.get_resource_name
     while true
       print "Please enter resource name: "
       name = STDIN.gets.chomp.strip
       break if is_name_valid (name)
       puts "Incorrect name. Please enter a valid name!!!"
     end
+    return name
+  end
+
+  def self.get_resource_category
     while true
       print "Please enter its category: "
       category = STDIN.gets.chomp.strip
       break if is_role_valid category
       puts "Incorrect role. Please enter a valid category"
     end
-    @booking_manager.add_resource name: name , category: category
+    return category
   end
 
   def self.make_booking
@@ -125,18 +147,9 @@ class Console
       resource_id = STDIN.gets.chomp.strip
 
       if @booking_manager.resource_exist? resource_id
-        while true
-          print  "Enter starting date: (yyyy-mm-dd) "
-          starting_date = STDIN.gets.chomp.strip
-          break if is_valid_date(starting_date)
-          puts  "Invalid date"
-        end
-        while true
-          print "Enter ending date: (yyyy-mm-dd) "
-          ending_date = STDIN.gets.chomp.strip
-          break if is_valid_date(ending_date)
-          puts  "Invalid date"
-        end
+        starting_date = get_starting_date
+        ending_date = get_ending_date
+
         if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
           puts "Resources booked successfully"
         else
@@ -146,6 +159,26 @@ class Console
          puts "Invalid resouce id"
       end
     end
+  end
+
+  def self.get_starting_date
+    while true
+      print  "Enter starting date: (yyyy-mm-dd) "
+      starting_date = STDIN.gets.chomp.strip
+      break if is_valid_date(starting_date)
+      puts  "Invalid date"
+    end
+    return starting_date
+  end
+
+  def self.get_ending_date
+    while true
+      print "Enter ending date: (yyyy-mm-dd) "
+      ending_date = STDIN.gets.chomp.strip
+      break if is_valid_date(ending_date)
+      puts  "Invalid date"
+    end
+    return ending_date
   end
 
   def self.is_valid_date(date)
