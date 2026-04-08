@@ -1,3 +1,5 @@
 .ruby-lsp
 /vendor/bundle
+booking_system.db
+
 *.db

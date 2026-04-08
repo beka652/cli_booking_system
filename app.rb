@@ -1,128 +1,241 @@
-require_relative "./booking"
-require_relative "./resource"
-require_relative "./booking"
+require_relative "./controllers/booking_manager"
+require_relative "./errors/booking_system_error"
 
-class Main
 
-  def initialize()
-    @resource_container = {} # store all resource creating during the runtime of this program
-    @booking_container = {} # contains all booking made during a single runtime
-    @user_container = {} # contains all users created using during a single runtime
-    menu
-  end
+# accepted commands
+#  -> ruby app.rb -list [users | resources | bookings]
+# -> ruby app.rb -create user
+# -> ruby app.rb -make booking
+# -> ruby app.rb -cancel booking
+# -> ruby app.rb -add resource
+# also commands are case-sensitive (all commands must be in lower-case).
 
-  def menu
-    options = %Q(
-    1.Make Booking
-    2.Cancel Booking
-    3.Add Resource
-    4.List available resources
-    5.List bookings
-    6.List users
-    7.quit
-
-    Enter number: )
-
-    while true
-      print options
-      choice = gets.chomp.strip
+class Console
+  @booking_manager ||=BookingManager.new
 
 
 
-      case choice
-      when  "1"
-         make_booking
-      when "2"
-        cancel_booking
-      when "3"
-        add_resource
-      when "4"
-        list_available_resources
-      when "5"
-        list_bookings
-      when "6"
-        list_users
-      when "7"
-        exit
-      else
-        raise "Unkown command: #{choice}"
-      end
-    end
+  def self.execute(args=ARGV)
+    begin
 
-
-  end
-
-  def make_booking
-    puts "Make booking"
-    # Get the resource id first
-    print "Enter Resource id: "
-    resource_id = get.chomp.strip
-    resource = @resource_container[resource_id]
-
-    # only proceed if the resource exists
-    if resource
-      # get the user id
-      print "Enter user id: "
-      user_id = gets.chomp.strip
-      user = @user_container[user_id]
-      # only proceed if the user is available
-      if user
-        booking = Booking.new(user, resource)
-        @booking_container[booking.id] = booking
-      end
-    end
-  end
-
-
-
-
-  def cancel_booking
-    puts "Cancel Booking"
-    print "Enter Booking id: "
-    booking_id = get.chomp.strip
-    booking = @booking_container[booking_id]
-    if booking
-      booking.cancel
+    command = args.join " "
+    case command
+    when "-list users", "-list resources", "-list bookings" # done
+      list_ command
+    when "-create user" # done
+      create_user
+    when "-make booking" # done
+      make_booking
+    when "-cancel booking"
+      cancel_booking
+    when "-add resource" #
+      #do sth
+      add_resource
+    when  "-help"
+      help
     else
-      raise "Booking don't exist"
+      raise BookingSystemError, "Invalid Command"
+    end
+
+    rescue BookingSystemError => e
+      puts e.message
     end
   end
 
 
+  private
 
-  def add_resource
-    puts "Add resource"
-    print "Enter resouce id: "
-    id = get.chomp.strip
-    print "Enter resource name: "
-    name = get.chomp.strip
-    print "Enter resource category: "
-    category = get.chomp.strip
-
-    resource = Resource.new(id, name , category)
-    @resource_container[id] = resource
-  end
-
-  def list_available_resources
-    puts "id-----------name----------category"
-    @resource_container.each do |key, value|
-      puts "#{id} -------- #{value.name} ------- #{value.category}"
-    end
-  end
-  def list_bookings
-    puts "id------user----resource-----status----created_at"
-    @booking_container.each do |key, value|
-      puts "#{id} -------- #{value.user.name} ------- #{value.resource.name}-------#{value.status}------#{value.created}"
-    end
-  end
-  def list_users
-    puts "id-----------name----------role"
-    @user_container.each do |key, value|
-      puts "#{id} -------- #{value.name} ------- #{value.role}"
+  def self.list_ command
+    _, list_type = command.split " "
+    case list_type
+    when "users"
+      list_users
+    when "resources"
+      list_resources
+    else
+      list_bookings
     end
   end
 
+  def self.list_users
+    puts @booking_manager.list_users
+  end
+
+  def self.list_resources
+    puts @booking_manager.list_resources
+  end
+
+  def self.list_bookings
+    puts @booking_manager.list_bookings
+  end
+
+  def self.create_user
+    name = get_name
+    role = get_role
+
+    @booking_manager.create_user name: name, role: role
+  end
+
+  def self.get_user_name
+    while true
+      print "Please enter your name: "
+      name = STDIN.gets.chomp.strip
+      break if is_name_valid (name)
+      puts "Incorrect name. Please enter a valid name!!!"
+    end
+    return name
+  end
+
+  def self.get_user_role
+    while true
+      print "Please enter your role: "
+      role = STDIN.gets.chomp.strip
+      break if is_role_valid role
+      puts "Incorrect role. Please enter a valid role"
+    end
+    return role
+  end
+
+  def self.is_name_valid name
+    name_pattern = /^([a-zA-Z ]{2,50})$/
+    if name_pattern.match? name
+      return true
+    else
+      false
+    end
+  end
+
+  def self.is_role_valid role
+    role_pattern = /^([a-zA-Z ]{2,50})$/
+    if role_pattern.match? role
+      return true
+    else
+      return false
+    end
+  end
+
+  def self.add_resource
+    name = get_resource_name
+    category = get_resource_category
+    @booking_manager.add_resource name: name , category: category
+  end
+
+  def self.get_resource_name
+    while true
+      print "Please enter resource name: "
+      name = STDIN.gets.chomp.strip
+      break if is_name_valid (name)
+      puts "Incorrect name. Please enter a valid name!!!"
+    end
+    return name
+  end
+
+  def self.get_resource_category
+    while true
+      print "Please enter its category: "
+      category = STDIN.gets.chomp.strip
+      break if is_role_valid category
+      puts "Incorrect role. Please enter a valid category"
+    end
+    return category
+  end
+
+  def self.make_booking
+
+    print  "Enter user id: "
+    user_id = STDIN.gets.chomp.strip
+
+    user = @booking_manager.get_user(user_id)
+
+    if user.nil?
+      puts "Invalid user!!!"
+    elsif not (["assitant", "student"].include? user.role.downcase )
+      puts "Sorry only assistant and student can create booking"
+    else
+      print "Enter resource id: "
+      resource_id = STDIN.gets.chomp.strip
+
+      if @booking_manager.resource_exist? resource_id
+        starting_date = get_starting_date
+        ending_date = get_ending_date
+
+        if @booking_manager.make_booking(user_id, resource_id, starting_date, ending_date)
+          puts "Resources booked successfully"
+        else
+          puts "Cannot currently create booking. (Date range occupied or conflicting)"
+        end
+      else
+         puts "Invalid resouce id"
+      end
+    end
+  end
+
+  def self.get_starting_date
+    while true
+      print  "Enter starting date: (yyyy-mm-dd) "
+      starting_date = STDIN.gets.chomp.strip
+      break if is_valid_date(starting_date)
+      puts  "Invalid date"
+    end
+    return starting_date
+  end
+
+  def self.get_ending_date
+    while true
+      print "Enter ending date: (yyyy-mm-dd) "
+      ending_date = STDIN.gets.chomp.strip
+      break if is_valid_date(ending_date)
+      puts  "Invalid date"
+    end
+    return ending_date
+  end
+
+  def self.is_valid_date(date)
+    ymd = date.split("-")
+    if ymd.length != 3
+      return false
+    elsif  ymd[0].length != 4 || ymd[1].length != 2 || ymd[2].length != 2
+      return false
+    elsif not (ymd[0].match(/\A\d+\z/) && ymd[1].match(/\A\d+\z/) && ymd[2].match(/\A\d+\z/) )
+      return false
+    else
+      return true
+    end
+  end
+
+  def self.cancel_booking
+    print "Enter booking id: "
+    id = STDIN.gets.chomp.strip
+
+    if @booking_manager.booking_exist? id
+      if @booking_manager.cancel_booking id
+       puts  "Booking cancelled successfully"
+      else
+        puts "Booking already cancelled!!!"
+      end
+    else
+      print "Incorrect booking id"
+    end
+  end
+
+  def self.help
+    puts <<~HELP
+                ____________________
+                # accepted commands #
+                ---------------------
+
+    # -> ruby app.rb -list [users | resources | bookings]
+    # -> ruby app.rb -create user
+    # -> ruby app.rb -make booking
+    # -> ruby app.rb -cancel booking
+    # -> ruby app.rb -add resource
+
+      # !!!  Note: all  commands are case-sensitive (all commands must be in lower-case). !!!
+    HELP
+  end
 end
 
 
-Main.new
+
+
+Console.execute
