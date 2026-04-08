@@ -15,7 +15,7 @@ class User
   SQL
 
   def self.get_user(user_id)
-    result = @db.execute("SELECT * FROM users WHERE id=#{user_id}")
+    result = @db.execute("SELECT * FROM users WHERE id='#{user_id}'")
 
     if result.empty?
       return nil
@@ -44,6 +44,13 @@ class User
     @db.execute("INSERT INTO users (id, name, role) VALUES (?, ?, ?)",
       [id, name, role])
 
+  end
+
+  attr_reader :id, :name, :role
+  def initialize(id, name, role)
+    @id = id
+    @name = name
+    @role = role
   end
 
 end

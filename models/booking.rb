@@ -1,6 +1,6 @@
 require "securerandom"
 require "sqlite3"
-requie "date"
+require "date"
 
 class Booking
   @title = "Bookings"
@@ -30,18 +30,18 @@ class Booking
   end
 
   def self.make_booking(user_id, resource_id, starting_date, ending_date)
-    result = @db.execute("SELECT * FROM bookings WHERE resource_id=#{resource_id}")
+    result = @db.execute("SELECT * FROM bookings WHERE resource_id='#{resource_id}'")
     if !(result.empty?)
       result.each do |row|
         return false if conflict_exist? row, starting_date, ending_date
       end
     else
       id = IDGenerator.generate_booking_id
-      result = @db.execute("SELECT * FROM bookings WHERE id = \"#{id}\"")
+      result = @db.execute("SELECT * FROM bookings WHERE id = '#{id}'")
 
       until result.empty?
         id = IDGenerator.generate_booking_id
-        result = @db.execute("SELECT * FROM bookings WHERE id = #{id}")
+        result = @db.execute("SELECT * FROM bookings WHERE id = '{id}'")
       end
 
       @db.execute("INSERT INTO bookings (id, user_id, resource_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)",
@@ -54,7 +54,7 @@ class Booking
     row_start_date = Date.parse(row[3])
     row_end_date = Date.parse(row[4])
 
-    new_start_date = Date.parse(startng_date)
+    new_start_date = Date.parse(starting_date)
     new_end_date = Date.parse(ending_date)
 
     if new_end_date < row_start_date &&
@@ -62,7 +62,7 @@ class Booking
      return false
     else
       return true
-  end
+    end
 
   end
 
