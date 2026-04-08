@@ -148,7 +148,7 @@ What is covered in `test/test_booking.rb`:
 
 ## Known Issues
 
-- Booking creation currently checks role values `assitant` and `student` in `app.rb`; note the spelling is `assitant` in the current implementation.
+- Booking creation currently allows only `assistant` and `student` roles in `app.rb`.
 
 ## Troubleshooting
 

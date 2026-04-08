@@ -149,7 +149,7 @@ class Console
 
     if user.nil?
       puts "Invalid user!!!"
-    elsif not (["assitant", "student"].include? user.role.downcase )
+    elsif not (["assistant", "student"].include? user.role.downcase )
       puts "Sorry only assistant and student can create booking"
     else
       print "Enter resource id: "
