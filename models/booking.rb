@@ -57,7 +57,9 @@ class Booking
     new_start_date = Date.parse(starting_date)
     new_end_date = Date.parse(ending_date)
 
-    if new_end_date < row_start_date &&
+    if row[5].strip == "CANCELLED" # if the status is not active
+      return false
+    elsif  new_end_date < row_start_date &&
      row_end_date < new_start_date
      return false
     else
