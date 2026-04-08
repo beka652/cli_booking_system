@@ -37,7 +37,8 @@ class BookingManager
   def add_resource name:, category:
     @resource_model.add_resource name:, category:
   end
-  def make_booking
+  def make_booking(user_id, resource_id, starting_date, ending_date)
+    @booking_model.make_booking(user_id, resource_id, starting_date, ending_date)
   end
   def cancel_booking
   end
