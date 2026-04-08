@@ -161,10 +161,11 @@ class Console
     id = STDIN.gets.chomp.strip
 
     if @booking_manager.booking_exist? id
-      puts "Booking exists"
-      return
-      @booking_manager.cancel_booking id
-      "Booking cancelled successfully"
+      if @booking_manager.cancel_booking id
+       puts  "Booking cancelled successfully"
+      else
+        puts "Booking already cancelled!!!"
+      end
     else
       print "Incorrect booking id"
     end

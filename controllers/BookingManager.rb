@@ -40,7 +40,8 @@ class BookingManager
   def make_booking(user_id, resource_id, starting_date, ending_date)
     @booking_model.make_booking(user_id, resource_id, starting_date, ending_date)
   end
-  def cancel_booking
+  def cancel_booking id
+    @booking_model.cancel_booking id
   end
 
   def booking_exist? id

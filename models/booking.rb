@@ -71,4 +71,16 @@ class Booking
     result = @db.execute("SELECT * FROM bookings where id='#{id}'")
     if result.empty? then return false else return true end
   end
+
+  def self.cancel_booking id
+    status = @db.execute("SELECT status FROM bookings where id='#{id}'")
+    return false if status[0][0] == "CANCELLED"
+    @db.execute <<~SQL
+      UPDATE bookings
+      SET status = 'CANCELLED'
+      WHERE id = '#{id}'
+    SQL
+    return true
+  end
+
 end
