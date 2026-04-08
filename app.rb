@@ -1,4 +1,5 @@
 require_relative "./controllers/booking_manager"
+require_relative "./errors/booking_system_error"
 
 
 # accepted commands
@@ -15,6 +16,8 @@ class Console
 
 
   def self.execute(args=ARGV)
+    begin
+
     command = args.join " "
     case command
     when "-list users", "-list resources", "-list bookings" # done
@@ -31,9 +34,15 @@ class Console
     when  "-help"
       help
     else
-      # command not found!!!
+      raise BookingSystemError, "Invalid Command"
+    end
+
+    rescue BookingSystemError => e
+      puts e.message
     end
   end
+
+
   private
 
   def self.list_ command
